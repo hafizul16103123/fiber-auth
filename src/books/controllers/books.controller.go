@@ -2,7 +2,7 @@ package booksController
 
 import (
 	"fiber-app/src/books/dtos"
-	"fiber-app/src/books/services"
+	bookService "fiber-app/src/books/services"
 
 	"github.com/gofiber/fiber/v2"
 )

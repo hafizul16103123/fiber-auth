@@ -7,6 +7,7 @@ import (
 	"fiber-app/src/books/repository"
 	"fiber-app/src/common"
 	"fiber-app/src/models"
+	"fiber-app/src/utils"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -36,6 +37,12 @@ func (s *BookService) GetBookByID(ctx context.Context, id string) (*models.Book,
 }
 
 func (s *BookService) CreateBook(ctx context.Context, dto *dtos.CreateDTO) (*models.Book, error) {
+	// Validate the DTO
+	if err := dto.Validate(); err != nil {
+		// Format validation error
+		errMsg := utils.FormatValidationError(err)
+		return nil, &utils.Error{Msg: errMsg} // Return a custom error
+	}
 	book := models.Book{
 		Title:  dto.Title,
 		Author: dto.Author,

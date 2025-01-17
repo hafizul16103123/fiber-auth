@@ -7,7 +7,7 @@ import (
 )
 
 func AddBookGroup(app *fiber.App) {
-		// Initialize the controller and routes
+	// Initialize the controller and routes
 	bookController := booksController.NewBookController()
 	bookGroup := app.Group("/books")
 
