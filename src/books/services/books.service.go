@@ -2,6 +2,7 @@ package bookService
 
 import (
 	"context"
+	"fmt"
 
 	"fiber-app/src/books/dtos"
 	"fiber-app/src/books/repository"
@@ -9,6 +10,7 @@ import (
 	"fiber-app/src/models"
 	"fiber-app/src/utils"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -41,18 +43,27 @@ func (s *BookService) CreateBook(ctx context.Context, dto *dtos.CreateDTO) (*mod
 	if err := dto.Validate(); err != nil {
 		// Format validation error
 		errMsg := utils.FormatValidationError(err)
-		return nil, &utils.Error{Msg: errMsg} // Return a custom error
+		return nil, &utils.Error{Message: errMsg} // Return a custom error
 	}
 	book := models.Book{
 		Title:  dto.Title,
 		Author: dto.Author,
 		Year:   dto.Year,
 	}
-	_, err := s.repo.CreateBook(ctx, &book)
+	res, err := s.repo.CreateBook(ctx, &book)
+	fmt.Println(res)
 	if err != nil {
 		return nil, err
 	}
+	// Extract the inserted ID and set it on the book object
+	if oid, ok := res.InsertedID.(primitive.ObjectID); ok {
+		book.ID = oid
+	} else {
+		return nil, &utils.Error{Message: "Failed to retrieve inserted ID"}
+	}
+
 	return &book, nil
+
 }
 
 func (s *BookService) UpdateBook(ctx context.Context, id string, dto *dtos.UpdateDTO) (*models.Book, error) {

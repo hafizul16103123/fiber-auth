@@ -2,6 +2,7 @@ package common
 
 import (
 	"context"
+	"fmt"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -30,6 +31,7 @@ func (r *CommonRepository) FindAll(ctx context.Context, filter interface{}, resu
 
 // FindOne retrieves a single document by a filter.
 func (r *CommonRepository) FindOne(ctx context.Context, filter interface{}, result interface{}) error {
+	fmt.Println(filter,result)
 	return r.Collection.FindOne(ctx, filter).Decode(result)
 }
 

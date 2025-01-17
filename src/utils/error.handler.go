@@ -8,11 +8,11 @@ import (
 // // Error struct is used to represent custom errors with messages
 type Error struct {
 	Err   string `json:"error"`
-	Msg string `json:"message"`
+	Message string `json:"message"`
 }
 
 func (e *Error) Error() string {
-	return e.Msg
+	return e.Message
 }
 // FormatValidationError formats the validation errors into a user-friendly message.
 func FormatValidationError(err error) string {
